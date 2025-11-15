@@ -1,55 +1,96 @@
 import utils
+import logger
 import time 
+from datetime import datetime
+
 
 def otp_verification (): 
     otp, created_at = utils.generate_otp()
-
+    ttl = 30 
     print("---- OTP Verification ----")
-    print("\nAn OTP has been sent to your device")
-    print(f"OTP sent: {otp}\n")
+    print("\nOTP has been sent to your device")
+    print(f"Your OTP is: {otp}\n")
 
-    input_validator(otp, created_at)
+    print("\nPlease Enter the 6-digit OTP.")
+    print("Type 'resend' to get a new code.")
 
+    attempts = 3 
 
-def input_validator(otp, created_at):
-   
-    max_attempts = 3
-    otp_ttl = 30 
+    while attempts > 0: 
+        attempts-=1
+        user_input = get_user_input()
 
-    while max_attempts > 0: 
-        max_attempts -= 1
-        elapsed = time.time() - created_at
-
-        try: 
-            user_otp = input("Enter OTP: ")
-            int(user_otp)
-            if len(user_otp) != 6: 
-                raise Exception(f"Invalid input: Please enter an integer of 6 digits. Attempts left: {max_attempts}")
+        if wants_resend(user_input): 
+            otp_verification()
+            break
         
-        except ValueError as te: 
-            print(f"Value Error: The input should be an Integer. Attempts left: {max_attempts}")
+        if not is_input_valid(user_input): 
+            print(f"Attempts {attempts}")
+            log_result("Input Invalid", otp, attempts)
+            continue
 
-        except Exception as e: 
-            print(e)
-        
-        elapsed = time.time() - created_at
-        if elapsed > otp_ttl: 
-            print("Time expired! The OTP is no longer valid. ")
-            code = input("To resend a new OTP type 'resend': ")
-            if code.lower() == 'resend': 
-                otp_verification()
-            return 
-        
-        if user_otp == otp: 
-            print("Validated Successfuly. ")
-            return 
+        if is_otp_expried(created_at, ttl): 
+            print("The OTP time expired and is invalid.")
+            print("Request a new one. ")
+            log_result("Expired", otp, attempts)
+            break 
+        elif is_correct(otp, user_input): 
+            print("Success. OTP validated!")
+            log_result("Success", otp, attempts)
+            break 
         else: 
-            print(f"The entered OTP is not correct. Please try again. Attempts left: {max_attempts}")
+            print("Error: Provide the OTP sent.")
+            log_result("Failed", otp, attempts)
         
-        if max_attempts == 0: 
-            code = input("To resend a new OTP type 'resend': ")
-            if code.lower() == 'resend': 
-                otp_verification()
-            return 
-            
+
+def wants_resend(user_input):
+    if user_input.lower().strip() == 'resend': 
+        return True
+    return False 
+
+def get_user_input(): 
+    return input("\nEnter OTP or 'resend': ")
+
+def is_input_valid(user_otp): 
+    try: 
+        int(user_otp)
+        if len(user_otp)!=6: 
+            raise Exception("The input length should be 6 digits.")
+    
+    except ValueError as e: 
+        print("Value Erro: The input should be of type integer.", end=" ")
+        return False
+    
+    except Exception as e: 
+        print(e, end=" ")
+        return False
+    
+    return True
+
+def is_otp_expried(creatd_at, ttl): 
+    elapsed = time.time() - creatd_at
+
+    if elapsed>ttl: 
+        return True 
+    return False 
+
+
+
+def is_correct(otp, user_otp):
+    if otp == user_otp: 
+        return True
+    return False
+
+def log_result(status, otp, attempts): 
+    masked_otp = "".join(["*"]*4 + list(otp[-2:]))
+    attempts = 3-attempts
+    record = {
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+        "otp": masked_otp, 
+        "attempts":attempts, 
+        "status":status
+    }
+    logger.log_session(record)
+
+
 otp_verification()
