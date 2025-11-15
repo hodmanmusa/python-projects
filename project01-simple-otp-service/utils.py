@@ -1,4 +1,5 @@
 import random
+import time
 
 def generate_otp(length=6):
     """
@@ -12,4 +13,5 @@ def generate_otp(length=6):
 
     digits = "0123456789"
     otp = ''.join([random.choice(digits) for x in range(length)])
-    return otp 
+    created_at = time.time()
+    return (otp, created_at)
