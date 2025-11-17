@@ -1,13 +1,39 @@
 import utils
 import logger
 import time 
+import argparse
 from datetime import datetime
 
+def parse_arguments(): 
+    parser = argparse.ArgumentParser(description="OTP verification system")
 
-def otp_verification (): 
+    parser.add_argument(
+        '--length', 
+        type=int, 
+        default=6,
+        help="Length of the OTP (default 6)"
+    )
+    parser.add_argument(
+        '--max_attempts', 
+        type=int, 
+        default=3, 
+        help="Maximum number of attempts for OTP insertion (default 3)"
+    )
+    parser.add_argument(
+        '--ttl', 
+        type=int, 
+        default=30, 
+        help="Time-to-Live in seconds for OTP (default 30)"
+    )
+    return parser.parse_args
+
+
+def otp_verification (args): 
     while True: 
-        otp, created_at = utils.generate_otp()
-        ttl = 30
+        otp, created_at = utils.generate_otp(args.length)
+        ttl = args.ttl
+        attempts = args.max_attempts
+
         resend_requested = False
         attempts_used = 0
         status_message = ""
@@ -19,7 +45,7 @@ def otp_verification ():
         print("\nPlease Enter the 6-digit OTP.")
         print("Type 'resend' to get a new code.")
 
-        attempts = 3 
+        
 
         while attempts > 0: 
             attempts-=1
@@ -31,7 +57,7 @@ def otp_verification ():
             attempts_used += 1
             
             if not is_input_valid(user_input): 
-                print(f"Attempts {attempts}")
+                print(f"Attempts left: {attempts}")
                 status_message = "Invalid Input"
                 continue
 
@@ -72,7 +98,7 @@ def get_user_input():
 def is_input_valid(user_otp): 
     try: 
         if not user_otp.isdigit():
-            raise ValueError("Value Error: The input should be of type integer.")
+            raise ValueError("Invalid input: OTP must contain only digits.")
         if len(user_otp)!=6: 
             raise Exception("The input length should be 6 digits.")
     
@@ -115,4 +141,5 @@ def log_result(status, otp, attempts_used):
 
 
 if __name__ == "__main__":
-    otp_verification()
+    args = parse_arguments()
+    otp_verification(args)
