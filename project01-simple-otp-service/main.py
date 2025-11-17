@@ -9,6 +9,8 @@ def otp_verification ():
         otp, created_at = utils.generate_otp()
         ttl = 30
         resend_requested = False
+        attempts_used = 0
+        status_message = ""
 
         print("---- OTP Verification ----")
         print("\nOTP has been sent to your device")
@@ -26,31 +28,36 @@ def otp_verification ():
             if wants_resend(user_input): 
                 resend_requested = True 
                 break
+            attempts_used += 1
             
             if not is_input_valid(user_input): 
                 print(f"Attempts {attempts}")
-                log_result("Input Invalid", otp, attempts)
+                status_message = "Invalid Input"
                 continue
+
 
             if is_otp_expired(created_at, ttl): 
                 print("The OTP time expired and is invalid.")
                 print("Request a new one. ")
-                log_result("Expired", otp, attempts)
+                status_message = "expired"
                 break 
             
             elif attempts==0: 
                 print("OTP expired. No more attempts remeaning")
+                status_message = "failed"
                 break
             
             elif is_correct(otp, user_input): 
                 print("Success. OTP validated!")
-                log_result("Success", otp, attempts)
+                status_message = "success"
                 break 
 
             else: 
                 print("Error: Provide the OTP sent.")
-                log_result("Failed", otp, attempts)
+                status_message = "failed"
 
+        print_session_info(status_message, otp, attempts_used)
+        log_result(status_message, otp, attempts_used)
         if not resend_requested: 
             break
 
@@ -88,6 +95,13 @@ def is_correct(otp, user_otp):
         return True
     return False
 
+def print_session_info(message, otp, attempts_used):
+    print("\nSession info: ")
+    print("---------------------")
+    print(f"OTP: {otp}")
+    print(f"Status: {message}")
+    print(f"Attempts: {attempts_used}")
+
 def log_result(status, otp, attempts): 
     masked_otp = "".join(["*"]*4 + list(otp[-2:]))
     attempts_used = 3-attempts
@@ -98,6 +112,8 @@ def log_result(status, otp, attempts):
         "status":status
     }
     logger.log_session(record)
+
+
 
 if __name__ == "__main__":
     otp_verification()
