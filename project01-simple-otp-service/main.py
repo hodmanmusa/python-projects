@@ -99,5 +99,5 @@ def log_result(status, otp, attempts):
     }
     logger.log_session(record)
 
-
-otp_verification()
+if __name__ == "__main__":
+    otp_verification()
