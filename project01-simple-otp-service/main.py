@@ -43,7 +43,7 @@ def otp_verification ():
                 break 
             
             elif attempts==0: 
-                print("OTP expired. No more attempts remeaning")
+                print("OTP expired. No more attempts remaining")
                 status_message = "failed"
                 break
             
@@ -72,7 +72,7 @@ def get_user_input():
 def is_input_valid(user_otp): 
     try: 
         if not user_otp.isdigit():
-            raise ValueError("Value Erro: The input should be of type integer.")
+            raise ValueError("Value Error: The input should be of type integer.")
         if len(user_otp)!=6: 
             raise Exception("The input length should be 6 digits.")
     
@@ -102,9 +102,8 @@ def print_session_info(message, otp, attempts_used):
     print(f"Status: {message}")
     print(f"Attempts: {attempts_used}")
 
-def log_result(status, otp, attempts): 
+def log_result(status, otp, attempts_used): 
     masked_otp = "".join(["*"]*4 + list(otp[-2:]))
-    attempts_used = 3-attempts
     record = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
         "otp": masked_otp, 
