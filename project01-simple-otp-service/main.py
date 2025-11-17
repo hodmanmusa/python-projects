@@ -25,7 +25,7 @@ def parse_arguments():
         default=30, 
         help="Time-to-Live in seconds for OTP (default 30)"
     )
-    return parser.parse_args
+    return parser.parse_args()
 
 
 def otp_verification (args): 
@@ -54,30 +54,29 @@ def otp_verification (args):
             if wants_resend(user_input): 
                 resend_requested = True 
                 break
+
             attempts_used += 1
             
-            if not is_input_valid(user_input): 
-                print(f"Attempts left: {attempts}")
-                status_message = "Invalid Input"
-                continue
-
-
             if is_otp_expired(created_at, ttl): 
                 print("The OTP time expired and is invalid.")
                 print("Request a new one. ")
                 status_message = "expired"
+                break
+
+            if not is_input_valid(user_input): 
+                print(f"Attempts left: {attempts}")
+                status_message = "Invalid Input"
+                continue 
+            
+            elif is_correct(otp, user_input): 
+                print("Success. OTP validated!")
+                status_message = "success"
                 break 
             
             elif attempts==0: 
                 print("OTP expired. No more attempts remaining")
                 status_message = "failed"
                 break
-            
-            elif is_correct(otp, user_input): 
-                print("Success. OTP validated!")
-                status_message = "success"
-                break 
-
             else: 
                 print("Error: Provide the OTP sent.")
                 status_message = "failed"
@@ -99,7 +98,7 @@ def is_input_valid(user_otp):
     try: 
         if not user_otp.isdigit():
             raise ValueError("Invalid input: OTP must contain only digits.")
-        if len(user_otp)!=6: 
+        if len(user_otp)!=args.length: 
             raise Exception("The input length should be 6 digits.")
     
     except ValueError as e: 
@@ -122,14 +121,15 @@ def is_correct(otp, user_otp):
     return False
 
 def print_session_info(message, otp, attempts_used):
+    masked_otp = "".join(["*"]*(len(otp)-2) + list(otp[-2:]))
     print("\nSession info: ")
     print("---------------------")
-    print(f"OTP: {otp}")
+    print(f"OTP: {masked_otp}")
     print(f"Status: {message}")
     print(f"Attempts: {attempts_used}")
 
 def log_result(status, otp, attempts_used): 
-    masked_otp = "".join(["*"]*4 + list(otp[-2:]))
+    masked_otp = "".join(["*"]*(len(otp)-2) + list(otp[-2:]))
     record = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
         "otp": masked_otp, 
