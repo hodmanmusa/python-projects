@@ -81,12 +81,7 @@ def is_input_valid(user_otp):
 
 def is_otp_expired(creatd_at, ttl): 
     elapsed = time.time() - creatd_at
-
-    if elapsed>ttl: 
-        return True 
-    return False 
-
-
+    return elapsed>ttl
 
 def is_correct(otp, user_otp):
     if otp == user_otp: 
