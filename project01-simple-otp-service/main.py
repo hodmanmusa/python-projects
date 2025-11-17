@@ -32,7 +32,7 @@ def otp_verification ():
                 log_result("Input Invalid", otp, attempts)
                 continue
 
-            if is_otp_expried(created_at, ttl): 
+            if is_otp_expired(created_at, ttl): 
                 print("The OTP time expired and is invalid.")
                 print("Request a new one. ")
                 log_result("Expired", otp, attempts)
@@ -78,7 +78,7 @@ def is_input_valid(user_otp):
     
     return True
 
-def is_otp_expried(creatd_at, ttl): 
+def is_otp_expired(creatd_at, ttl): 
     elapsed = time.time() - creatd_at
 
     if elapsed>ttl: 
@@ -94,11 +94,11 @@ def is_correct(otp, user_otp):
 
 def log_result(status, otp, attempts): 
     masked_otp = "".join(["*"]*4 + list(otp[-2:]))
-    attempts = 3-attempts
+    attempts_used = 3-attempts
     record = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
         "otp": masked_otp, 
-        "attempts":attempts, 
+        "attempts":attempts_used, 
         "status":status
     }
     logger.log_session(record)
