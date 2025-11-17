@@ -64,12 +64,13 @@ def get_user_input():
 
 def is_input_valid(user_otp): 
     try: 
-        int(user_otp)
+        if not user_otp.isdigit():
+            raise ValueError("Value Erro: The input should be of type integer.")
         if len(user_otp)!=6: 
             raise Exception("The input length should be 6 digits.")
     
     except ValueError as e: 
-        print("Value Erro: The input should be of type integer.", end=" ")
+        print(e, end=" ")
         return False
     
     except Exception as e: 
