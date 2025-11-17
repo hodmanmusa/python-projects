@@ -42,7 +42,7 @@ def otp_verification (args):
         print("\nOTP has been sent to your device")
         print(f"Your OTP is: {otp}\n")
 
-        print("\nPlease Enter the 6-digit OTP.")
+        print(f"\nPlease Enter the {args.length}-digit OTP.")
         print("Type 'resend' to get a new code.")
 
         

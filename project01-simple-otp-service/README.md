@@ -16,18 +16,41 @@ It is designed for learning Python fundamentals: loops, conditionals, random mod
 ## How to Run
 1. Clone the repository
 ```
-    git clone https://github.com/<YOUR-USERNAME>/otp-verification-system.git
+    git clone https://github.com/hodmanmusa/otp-verification-system.git
     cd otp-verification-system
 ```
 2. python otp_verification/main.py
 ```
     python otp_verification/main.py
 ```
-
+3. Optional - Run with custom settings 
+```
+    python otp_verification/main.py --length 4 --max-attempts 5 --ttl 45
+```
 ## Learning Goals
 - How to use random numbers
 - How to apply basic security concepts
 - How to use time module for expiration
 - How to use file handling for logs
+- How to use argparse for creating an interactive CLI app
 
 ## Sample Output 
+### This example shows how the program runs using its default arguments.
+![Simple program output](assets/default_output.png)
+
+### The screenshot below shows how to use the program with arguments passed while running program from CLI. 
+![Program Output with Parseargs](assets/parse_args.png)
+
+## Project Structure 
+```
+project01-simple-otp-system/
+│-- assets/
+│     ├-- default_output.png
+│     ├-- parse_args.png
+│-- logger.py
+|-- main.py
+|-- utils.py
+│-- README.md
+│-- otp_log.txt
+
+```
