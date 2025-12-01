@@ -14,8 +14,10 @@ def start():
         
         if not is_selection_valid(selection): 
             break 
+
+        selection = int(selection)
         
-        if int(selection) == 1: 
+        if selection == 1: 
             expense = add_expense()
             if validate_expense(expense): 
                 save_expense(expense)
@@ -31,8 +33,10 @@ def display_menu():
     for index, item in enumerate(options):
         print(f"{index+1}. {item}")
 
+
 def user_selection(): 
     return input("Selection an option (1-8): ")
+
 
 def is_selection_valid(selection): 
     try: 
@@ -74,10 +78,14 @@ def validate_expense(expense):
         print(e)
     return True 
 
+
 def save_expense(expense): 
+    print("Call recived")
     amount, date, category, description = expense
     expense_dict = {"amount": amount, "date": date,"category":category, "description":description}
-
+    
+    with open("expense_tracker", "a") as file: 
+        file.write(json.dumps(expense_dict)+"\n")
 
 if __name__ == "__main__": 
     start()
