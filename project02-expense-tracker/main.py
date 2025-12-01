@@ -21,7 +21,7 @@ def start():
             expense = add_expense()
             if validate_expense(expense): 
                 save_expense(expense)
-
+                log_operation("Success", "New Expense")
         
 
 def display_menu(): 
@@ -54,7 +54,7 @@ def is_selection_valid(selection):
 def add_expense(): 
     print("Add expense by providing the details below. ")
     amount = input("Amount: ")
-    date = input("Date: ")
+    date = input("Date(YYYY-MM-DD): ")
     category = input("Category: ")
     description = input("Description: ")
     return (amount, date, category, description)
@@ -80,12 +80,26 @@ def validate_expense(expense):
 
 
 def save_expense(expense): 
-    print("Call recived")
     amount, date, category, description = expense
     expense_dict = {"amount": amount, "date": date,"category":category, "description":description}
-    
-    with open("expense_tracker", "a") as file: 
-        file.write(json.dumps(expense_dict)+"\n")
+    try:
+        with open("expense_tracker.json", "r") as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = []
+
+    data.append(expense_dict)
+
+    with open("expense_tracker.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+def log_operation(status, operation):
+    log_result = {
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+        "status":status, 
+        "operation": operation, 
+    }
+    logger_config.log_operation(log_result)
 
 if __name__ == "__main__": 
     start()
