@@ -23,6 +23,10 @@ def start():
                 save_expense(expense)
                 log_operation("Success", "New Expense")
         
+        if selection == 2: 
+            print("Displaying all expense records")
+            display_expenses()
+            log_operation("Success", "View All Expenses")
 
 def display_menu(): 
     options = ['Add expense', 'View all expenses', 'Search expenses', 'Edit expense', 'Delete expense', 'Analysis & Aggregations', 'Undo last action', 'Exit']
@@ -93,6 +97,18 @@ def save_expense(expense):
     with open("expense_tracker.json", "w") as f:
         json.dump(data, f, indent=4)
 
+def display_expenses():
+    with open("expense_tracker.json", "r") as file: 
+        data = json.load(file)
+    
+    for index, d in enumerate(data,start=1): 
+        print(f"\nRecord No: {index}")
+        print(f'\tAmount: {d["amount"]}')
+        print(f'\tDate: {d["date"]}')
+        print(f'\tCategory: {d["category"]}')
+        print(f'\tDescription: {d["description"]}')
+        print("----------------------")
+    print()
 def log_operation(status, operation):
     log_result = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
