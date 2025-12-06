@@ -29,8 +29,11 @@ def start():
             log_operation("Success", "View All Expenses")
 
         if selection == 3: 
-            key, type = search_menu()
-            search_records(key, type)
+            selection = search_menu()
+            print("Selection: ", selection)
+            if validate_search_input(selection) is not False: 
+                key = input(f"Enter key: ")
+                search_records(key, selection)
 
 def display_menu(): 
     options = ['Add expense', 'View all expenses', 'Search expenses', 'Edit expense', 'Delete expense', 'Analysis & Aggregations', 'Undo last action', 'Exit']
@@ -123,31 +126,45 @@ def search_menu():
 
     for i, opt in enumerate(options, start=1): 
         print(f"{i}. Search by {opt}")
-    
     selection = input("Enter your selection: ")
+    return selection
+
+def validate_search_input(selection): 
+    
     try: 
-        if selection.isdigit(): 
+        if not selection.isdigit(): 
             raise ValueError("The amount should be number.")
-        if selection not in range(1, 9): 
-            raise Exception(f"The selected option is out of range.")
+        if int(selection) not in range(1, 4): 
+            raise Exception("The input is not in range. ")
     except ValueError as e: 
         print(e)
+        return False 
     except Exception as e:
         print(e)
-    key = input("Enter the key: ")
-    return (key, selection)
+        return False 
+    return selection
+
 
 def search_records(key, selection): 
     data = load_data()
-
-    if int(selection) == 1:
+    selection = int(selection)
     
-        category_data = [item for item in data if item.get('category')==key]
-        if len(category_data)>0: 
-            display_expenses(category_data)
-        else: 
-            print("No record found with key ")
+    filtered_data = []
+    if selection == 1:
+        filtered_data = [item for item in data if item.get('category')==key]
+    elif selection == 2: 
+        filtered_data = [item for item in data if item.get('date')==key]
+    elif selection == 3: 
+        filtered_data = [item for item in data if item.get('amount')==key]
+    else: 
+        print("Invalid Selection")
+    
+    if len(filtered_data)>0:
+        display_expenses(filtered_data)
+    else: 
+        print("No data found for the specified key.") 
         return 
+    
 
 def log_operation(status, operation):
     log_result = {
