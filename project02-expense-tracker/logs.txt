@@ -2,3 +2,4 @@
 {"time": "2025-12-01 22:55:30", "status": "Success", "operation": "New Expense"}
 {"time": "2025-12-01 22:56:21", "status": "Success", "operation": "New Expense"}
 {"time": "2025-12-01 23:41:15", "status": "Success", "operation": "View All Expenses"}
+{"time": "2025-12-06 23:25:30", "status": "Success", "operation": "View All Expenses"}

@@ -28,6 +28,10 @@ def start():
             display_expenses()
             log_operation("Success", "View All Expenses")
 
+        if selection == 3: 
+            key, type = search_menu()
+            search_records(key, type)
+
 def display_menu(): 
     options = ['Add expense', 'View all expenses', 'Search expenses', 'Edit expense', 'Delete expense', 'Analysis & Aggregations', 'Undo last action', 'Exit']
     
@@ -97,10 +101,12 @@ def save_expense(expense):
     with open("expense_tracker.json", "w") as f:
         json.dump(data, f, indent=4)
 
-def display_expenses():
+def load_data(): 
     with open("expense_tracker.json", "r") as file: 
         data = json.load(file)
-    
+    return data 
+
+def display_expenses(data = load_data()):
     for index, d in enumerate(data,start=1): 
         print(f"\nRecord No: {index}")
         print(f'\tAmount: {d["amount"]}')
@@ -109,6 +115,40 @@ def display_expenses():
         print(f'\tDescription: {d["description"]}')
         print("----------------------")
     print()
+
+def search_menu(): 
+    print("Search expenses: ")
+    print("You can search by the following keys: ")
+    options = ["category", "date", "amount", "Amount Range"]
+
+    for i, opt in enumerate(options, start=1): 
+        print(f"{i}. Search by {opt}")
+    
+    selection = input("Enter your selection: ")
+    try: 
+        if selection.isdigit(): 
+            raise ValueError("The amount should be number.")
+        if selection not in range(1, 9): 
+            raise Exception(f"The selected option is out of range.")
+    except ValueError as e: 
+        print(e)
+    except Exception as e:
+        print(e)
+    key = input("Enter the key: ")
+    return (key, selection)
+
+def search_records(key, selection): 
+    data = load_data()
+
+    if int(selection) == 1:
+    
+        category_data = [item for item in data if item.get('category')==key]
+        if len(category_data)>0: 
+            display_expenses(category_data)
+        else: 
+            print("No record found with key ")
+        return 
+
 def log_operation(status, operation):
     log_result = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
