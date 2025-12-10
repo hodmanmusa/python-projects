@@ -29,12 +29,21 @@ def start():
             log_operation("Success", "View All Expenses")
 
         if selection == 3: 
-            selection = search_menu()
-            print("Selection: ", selection)
-            if validate_search_input(selection) is not False: 
+            type = search_menu()
+            print("Selection: ", type)
+            if validate_search_input(type) is not False: 
                 key = input(f"Enter key: ")
-                search_records(key, selection)
+                search_records(key, type)
+                log_operation("Success", f"Search {type} by key:{key}")
+        
+        if selection == 4: 
+            display_expenses()
+            record_no = input("Enter the record number to edit: ")
+            display_single_expense(int(record_no))
+            data = edit_record()
+            update_record(record_no, data)
 
+# ----------------------- Menu ----------------------
 def display_menu(): 
     options = ['Add expense', 'View all expenses', 'Search expenses', 'Edit expense', 'Delete expense', 'Analysis & Aggregations', 'Undo last action', 'Exit']
     
@@ -62,6 +71,7 @@ def is_selection_valid(selection):
         return False 
     return True 
 
+# ------------------- Add Expense ----------------
 def add_expense(): 
     print("Add expense by providing the details below. ")
     amount = input("Amount: ")
@@ -119,6 +129,7 @@ def display_expenses(data = load_data()):
         print("----------------------")
     print()
 
+# ------- Search ---------------
 def search_menu(): 
     print("Search expenses: ")
     print("You can search by the following keys: ")
@@ -130,7 +141,6 @@ def search_menu():
     return selection
 
 def validate_search_input(selection): 
-    
     try: 
         if not selection.isdigit(): 
             raise ValueError("The amount should be number.")
@@ -163,9 +173,63 @@ def search_records(key, selection):
         display_expenses(filtered_data)
     else: 
         print("No data found for the specified key.") 
+        log_operation("Error", "Search: No data found for the specified key")
         return 
     
 
+# -------------------- Edit Expenses ----------------------------
+def select_single_record(index_no: int): 
+    data = load_data()
+    record = data[index_no-1]
+    return record
+
+def display_single_expense(index_no:int):
+    record = select_single_record(index_no)
+    print(f"Category: {record['category']}")
+    print(f"Amount: {record['amount']}")
+    print(f"Date: {record['date']}")
+    print(f"description: {record['description']}")
+    
+
+def edit_record(index_no:int): 
+    # Display record that is going to be edited
+    record = select_single_record(index_no)
+    print(f"Category: {record['category']}")
+    print(f"Amount: {record['amount']}")
+    print(f"Date: {record['date']}")
+    print(f"description: {record['description']}")
+    
+    # Edit the record
+    print("Edit the record above by providing the following details: ")
+    print("* If you don't want to edit a property just press enter: ")
+    
+    amount = input("Amount: ")
+    if amount == '': 
+        amount = record['amount']
+    
+    date = input("Date(YYYY-MM-DD): ")
+    if date == '': 
+        data=record['date']
+    
+    category = input("Category: ")
+    if category == '': 
+        category = record['category']
+
+    description = input("Description: ")
+    if description == '': 
+        description = record['description']
+    
+    return (amount, date, category, description)
+
+def update_record(record_no, data): 
+    amount, date, category, description = data 
+    record = select_single_record(record_no)
+    
+    edited_expense_dic = {'amount':amount, 'date':date, 'category':category, 'description':description}
+    
+
+
+# --------------------- Logging Operations -----------------------
 def log_operation(status, operation):
     log_result = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
