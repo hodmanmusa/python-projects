@@ -1,0 +1,32 @@
+player_id,name,nationality,age,primary_role,secondary_roles,batting_style,bowling_type
+AFG01,Rahmanullah Gurbaz,Afghanistan,22,Batsman,Wicketkeeper,Right,None
+AFG02,Ibrahim Zadran,Afghanistan,23,Batsman,None,Right,None
+AFG03,Hashmatullah Shahidi,Afghanistan,29,Batsman,Captain,Left,None
+AFG04,Najibullah Zadran,Afghanistan,30,Batsman,None,Left,None
+AFG05,Mohammad Nabi,Afghanistan,38,Allrounder,None,Right,Off Spin
+AFG06,Rashid Khan,Afghanistan,26,Bowler,None,Right,Leg Spin
+AFG07,Mujeeb Ur Rahman,Afghanistan,24,Bowler,None,Right,Off Spin
+AFG08,Naveen-ul-Haq,Afghanistan,25,Bowler,None,Right,Fast
+AFG09,Fazalhaq Farooqi,Afghanistan,23,Bowler,None,Left,Fast
+AFG10,Azmatullah Omarzai,Afghanistan,24,Allrounder,None,Right,Fast
+AFG11,Gulbadin Naib,Afghanistan,33,Allrounder,None,Right,Medium
+AFG12,Ikram Alikhil,Afghanistan,23,Batsman,Wicketkeeper,Right,None
+AFG13,Noor Ahmad,Afghanistan,19,Bowler,None,Left,Leg Spin
+AFG14,Karim Janat,Afghanistan,26,Allrounder,None,Right,Medium
+AFG15,Sharafuddin Ashraf,Afghanistan,29,Allrounder,None,Left,Off Spin
+
+PAK01,Babar Azam,Pakistan,29,Batsman,Captain,Right,None
+PAK02,Mohammad Rizwan,Pakistan,31,Batsman,Wicketkeeper,Right,None
+PAK03,Fakhar Zaman,Pakistan,33,Batsman,None,Left,None
+PAK04,Imam-ul-Haq,Pakistan,28,Batsman,None,Left,None
+PAK05,Iftikhar Ahmed,Pakistan,34,Allrounder,None,Right,Off Spin
+PAK06,Shadab Khan,Pakistan,26,Allrounder,None,Right,Leg Spin
+PAK07,Shaheen Afridi,Pakistan,24,Bowler,None,Left,Fast
+PAK08,Haris Rauf,Pakistan,30,Bowler,None,Right,Fast
+PAK09,Naseem Shah,Pakistan,21,Bowler,None,Right,Fast
+PAK10,Mohammad Nawaz,Pakistan,30,Allrounder,None,Left,Orthodox Spin
+PAK11,Asif Ali,Pakistan,33,Batsman,None,Right,None
+PAK12,Usman Qadir,Pakistan,30,Bowler,None,Right,Leg Spin
+PAK13,Faheem Ashraf,Pakistan,30,Allrounder,None,Left,Medium
+PAK14,Abdullah Shafique,Pakistan,24,Batsman,None,Right,None
+PAK15,Hasan Ali,Pakistan,30,Bowler,None,Right,Fast
