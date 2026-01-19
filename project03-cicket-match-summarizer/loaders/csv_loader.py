@@ -34,13 +34,19 @@ def validate_required_columns(df, required_columns, file_name):
         )
 
 
-def load_players(csv_path: str):
+def load_players(csv_path: str, countries: list[str]):
     path = Path(csv_path)
 
     if not path.exists():
         raise FileNotFoundError(f"Players file not found: {path}")
 
     df = pd.read_csv(path)
+    
+    # Filter by countries
+    df = df[df["nationality"].isin(countries)]
+    if df.empty:
+        raise ValueError(f"No players found for countries: {countries}")
+    
     validate_required_columns(df, REQUIRED_PLAYER_COLUMNS, "players.csv")
 
     if df["name"].isnull().any():
@@ -63,7 +69,8 @@ def batting_career(csv_batting_path: str):
         raise FileNotFoundError(f"Batting career file not found: {path}")
 
     df = pd.read_csv(path)
-    (df, REQUIRED_BATTING_COLUMNS, "batting_career.csv")
+    
+    validate_required_columns(df, REQUIRED_BATTING_COLUMNS, "batting_career.csv")
 
     for column in ["innings", "runs", "highest_score"]:
         if (df[column] < 0).any():
@@ -82,6 +89,8 @@ def bowling_career(csv_bowling_path: str):
         raise FileNotFoundError(f"Bowling career file not found: {path}")
 
     df = pd.read_csv(path)
+
+    
     validate_required_columns(df, REQUIRED_BOWLING_COLUMNS, "bowling_career.csv")
 
     for column in ["innings", "balls_bowled", "runs_conceded", "wickets"]:
